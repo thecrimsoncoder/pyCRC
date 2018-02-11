@@ -15,8 +15,8 @@ def main():
     option = int(input("OPTION: "))
 
     if(option == 1):
-        data = int(input("Please input the data you would like to check: "))
-        key = int(input("Please input the CRC key you would like to use: "))
+        data = input("Please input the data you would like to check: ")
+        key = input("Please input the CRC key you would like to use: ")
         buildCRC(key,data)
 
     elif(option == 2):
@@ -27,10 +27,24 @@ def buildCRC(key,data):
 
     # Number of bits that can be compared at a time
     keyLength = len(key)
-    data = padZeros(data,)
+    data = padZeros(data,keyLength)
 
 def padZeros (data,power):
     print("Using CRC polynomial generator x^3 + x + 1")
+    return True
+
+def calculateDegree(key):
+
+def calculatePoly(key):
+    result = ""
+    subtract = 1
+    for x in key:
+        if(x == 1):
+
+        elif(x == 0):
+        else:
+            print("Error (calculatePoly) Unexpected Value: " + x)
+
 
 def checkValue(dataInt, keyInt):
         if(dataInt == 0 and keyInt == 0):
