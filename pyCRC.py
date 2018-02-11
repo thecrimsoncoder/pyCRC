@@ -15,7 +15,7 @@ def main():
     option = int(input("OPTION: "))
 
     if(option == 1):
-        data = input("Please input the data you would like to check: ")
+        data = input("Please input the data you would like to encode: ")
         key = input("Please input the CRC key you would like to use: ")
         buildCRC(key,data)
 
@@ -25,25 +25,49 @@ def main():
 def buildCRC(key,data):
     print("Building CRC Code for: " + data + " using " + key)
 
-    # Number of bits that can be compared at a time
-    keyLength = len(key)
-    data = padZeros(data,keyLength)
+    print(calculatePoly(key))
 
-def padZeros (data,power):
-    print("Using CRC polynomial generator x^3 + x + 1")
+def verifyCRC(key,data):
     return True
 
+def padZeros (data,key):
+    power = calculateDegree(key)
+
+    for x in range(power):
+        data = data + "0"
+
+    return data
+
 def calculateDegree(key):
+    keyDegree = len(key)
+
+    for x in key:
+        if(int(x) == 1):
+            break
+        elif(int(x) == 0):
+            keyDegree = keyDegree - 1
+        else:
+            print("Error (calculateDegree) Unexpected Value: " + x)
+
+        return keyDegree
 
 def calculatePoly(key):
-    result = ""
-    subtract = 1
-    for x in key:
-        if(x == 1):
 
-        elif(x == 0):
+    result = ""
+    keyDegree = len(key) - 1
+
+    for x in key:
+        print("Checking: " + x)
+        if (int(x) == 1):
+            degree = "x^" + str(keyDegree) + " + "
+            result = result + degree
+            keyDegree = keyDegree - 1
+        elif (int(x) == 0):
+            keyDegree = keyDegree - 1
         else:
             print("Error (calculatePoly) Unexpected Value: " + x)
+
+    return result
 
 
 def checkValue(dataInt, keyInt):
