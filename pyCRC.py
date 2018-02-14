@@ -22,10 +22,15 @@ def main():
     elif(option == 2):
         print("Placeholder for verifyCRC")
 
-def buildCRC(key,data):
-    print("Building CRC Code for: " + data + " using " + key)
+    else:
+        print("Value is not accepted, Returning to menu....")
+        main()
 
-    print(calculatePoly(key))
+def buildCRC(key,data):
+    print("Building CRC Code for: " + data + " using " + key + " as generator key")
+
+    data = padZeros(data,key)
+    print(data)
 
 def verifyCRC(key,data):
     return True
@@ -39,7 +44,7 @@ def padZeros (data,key):
     return data
 
 def calculateDegree(key):
-    keyDegree = len(key)
+    keyDegree = int(len(key))
 
     for x in key:
         if(int(x) == 1):
@@ -49,7 +54,7 @@ def calculateDegree(key):
         else:
             print("Error (calculateDegree) Unexpected Value: " + x)
 
-        return keyDegree
+    return keyDegree
 
 def calculatePoly(key):
 
