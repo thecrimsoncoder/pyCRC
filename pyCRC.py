@@ -1,4 +1,4 @@
-# pyCRC.py - Python3.6 based cyclic redundancy check
+# pyCRC.py - Python3.6 based cyclic redundancy checker and builder
 print("+-------------------------------------+")
 print("|          p y C R C . P Y            |")
 print("| By: Sean McElhare (TheCrimsonCoder) |")
@@ -40,7 +40,7 @@ def padZeros (data,key):
 
     for x in range(power):
         data = data + "0"
-
+    print("Appending " + power + "zeros to the end of " + data)
     return data
 
 def calculateDegree(key):
@@ -54,6 +54,7 @@ def calculateDegree(key):
         else:
             print("Error (calculateDegree) Unexpected Value: " + x)
 
+    print("Degree of generator polynomial is: " + keyDegree)
     return keyDegree
 
 def calculatePoly(key):
