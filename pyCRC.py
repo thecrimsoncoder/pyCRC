@@ -23,11 +23,11 @@ def main():
         print("Placeholder for verifyCRC")
 
     else:
-        print("Value is not accepted, Returning to menu....")
+        print("!! Error (main): Value is not accepted, Returning to menu....")
         main()
 
 def buildCRC(key,data):
-    print("Building CRC Code for: " + data + " using " + key + " as generator key")
+    print(">> Building CRC Code for: " + data + " using " + key + " as the generator key")
 
     data = padZeros(data,key)
     print(data)
@@ -38,9 +38,11 @@ def verifyCRC(key,data):
 def padZeros (data,key):
     power = calculateDegree(key)
 
+    print(">> Appending " + str(power) + " zeros to the end of " + str(data))
+
     for x in range(power):
         data = data + "0"
-    print("Appending " + power + "zeros to the end of " + data)
+
     return data
 
 def calculateDegree(key):
@@ -52,9 +54,9 @@ def calculateDegree(key):
         elif(int(x) == 0):
             keyDegree = keyDegree - 1
         else:
-            print("Error (calculateDegree) Unexpected Value: " + x)
+            print("!! Error (calculateDegree): Unexpected Value: " + x)
 
-    print("Degree of generator polynomial is: " + keyDegree)
+    print(">> Degree of generator polynomial is: " + str(keyDegree))
     return keyDegree
 
 def calculatePoly(key):
@@ -71,7 +73,7 @@ def calculatePoly(key):
         elif (int(x) == 0):
             keyDegree = keyDegree - 1
         else:
-            print("Error (calculatePoly) Unexpected Value: " + x)
+            print("!! Error (calculatePoly): Unexpected Value: " + x)
 
     return result
 
@@ -86,6 +88,6 @@ def checkValue(dataInt, keyInt):
         elif(dataInt == 1 and keyInt == 1):
                 return 0
         else:
-            print("Error (checkValue): An unexpected value was given (frameInt: " + dataInt + " generatorInt : " + keyInt + ")")
+            print("!! Error (checkValue): Unexpected value was given (frameInt: " + dataInt + " generatorInt : " + keyInt + ")")
 
 main()
