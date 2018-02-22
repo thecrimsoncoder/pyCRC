@@ -112,10 +112,8 @@ def verifyCRC(key,data):
 
     if sum(remainder) == 0:
         return True
-    elif sum(remainder != 0):
-        return False
     else:
-        print("!! Error (verifyCRC): Function remainder resulted in: " + str(remainder))
+        return False
 
 def padZeros (data,key):
     power = calculateDegree(key)
