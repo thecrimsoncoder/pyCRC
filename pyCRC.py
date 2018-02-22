@@ -1,4 +1,7 @@
 # pyCRC.py - Python3.6 based cyclic redundancy checker and builder
+import sys
+import time
+
 print("+-------------------------------------+")
 print("|          p y C R C . P Y            |")
 print("| By: Sean McElhare (TheCrimsonCoder) |")
@@ -11,17 +14,37 @@ def main():
     print("| What would you like to do:          |")
     print("| 1. Build CRC Code                   |")
     print("| 2. Verify CRC Code                  |")
+    print("| 3. Quit                             |")
     print("+-------------------------------------+")
     option = int(input("OPTION: "))
 
     if(option == 1):
         data = input("Please input the data you would like to encode: ")
         key = input("Please input the generator polynomial you would like to use in binary form: ")
-        CRC(key,data)
+        remainder = CRC(key,data)
+
+        data_list = list(data)
+        data_list = list(map(int, data_list))
+
+        encoded_data = data_list + remainder
+        encoded_data = ''.join(str(encoded_data))
+
+        print(">> Encoded Data: " + str(encoded_data))
 
     elif(option == 2):
-        print("Placeholder for verifyCRC")
+        data = input("Please input the data you would like to check: ")
+        key = input("Please input the generator polynomial you used to generate the data: ")
+        verify = verifyCRC(key,data)
 
+        if(verify == True):
+            print(">> Data is ok :)")
+        else:
+            print(">> Data is NOT ok :( ")
+
+    elif(option == 3):
+        print(">> Until Next Time!")
+        time.sleep(2)
+        sys.exit(0)
     else:
         print("!! Error (main): Value is not accepted, Returning to menu....")
         main()
@@ -40,39 +63,38 @@ def CRC(key,data):
     print(">> Degree of generator key polynomial is: " + str(poly_degree))
     print(">> Initializing shift_register: " + str(shift_register))
     print(">> Preparing working_data: " + str(working_data))
-
+    print(">> Ready for lift-off....")
 
 
     while(len(working_data) > 0):
         if(shift_register[0] == 1):
 
-            # Testing ############################
             shift_register.append(working_data.pop(0))
-            print("Computing XOR on: " + str(shift_register) + " using key: " + str(key))
+
+            print(">> Computing XOR on: " + str(shift_register) + " using key: " + str(key))
+
             shift_register = computeCRC(key,shift_register)
             shift_register.pop(0)
-            ######################################
 
-            print(shift_register)
-            print(working_data)
+            print("SHIFT REGISTER: " + str(shift_register) + " WORKING_DATA: " '' + str(working_data))
 
         elif(shift_register[0] != 1):
             shift_register.append(working_data.pop(0))
             shift_register.pop(0)
 
-            print(shift_register)
-            print(working_data)
+            print("SHIFT REGISTER: " + str(shift_register) + " WORKING_DATA: " '' + str(working_data))
 
         else:
             print("!! Error (CRC): Unhandled Exception: ")
 
-    print("Remainder is: " + str(shift_register))
+    print(">> Remainder is: " + str(shift_register))
 
+    return shift_register
 
 def computeCRC(key,shift_register):
-    print("#################################################################")
+    print("#################### START XOR CALCULATION ####################")
     for index in range(0,len(shift_register)):
-        print("Comparing key value: " + str(key[index]) + " and shift_register value: " + str(shift_register[index]))
+        print("XOR: Comparing key value: " + str(key[index]) + " and shift_register value: " + str(shift_register[index]))
         if int(shift_register[index]) == int(key[index]):
 
             shift_register[index] = 0
@@ -80,17 +102,17 @@ def computeCRC(key,shift_register):
             shift_register[index] = 1
         else:
             print("!! Error (computeCRC): Unhandled Exception: ")
-    print("NEW SHIFT REGISTER: " + str(shift_register))
-    print("#################################################################")
+    print("XOR: New Shift Register Computed: " + str(shift_register))
+    print("##################### END XOR CALCULATION #####################")
     return shift_register
 
 def verifyCRC(key,data):
 
     remainder = CRC(key,data)
 
-    if remainder == 0:
+    if sum(remainder) == 0:
         return True
-    elif remainder != 0:
+    elif sum(remainder != 0):
         return False
     else:
         print("!! Error (verifyCRC): Function remainder resulted in: " + str(remainder))
