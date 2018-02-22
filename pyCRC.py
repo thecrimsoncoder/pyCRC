@@ -16,8 +16,8 @@ def main():
 
     if(option == 1):
         data = input("Please input the data you would like to encode: ")
-        key = input("Please input the CRC key you would like to use: ")
-        buildCRC(key,data)
+        key = input("Please input the generator polynomial you would like to use in binary form: ")
+        CRC(key,data)
 
     elif(option == 2):
         print("Placeholder for verifyCRC")
@@ -26,14 +26,55 @@ def main():
         print("!! Error (main): Value is not accepted, Returning to menu....")
         main()
 
-def buildCRC(key,data):
-    print(">> Building CRC Code for: " + data + " using " + key + " as the generator key")
+def CRC(key,data):
+    print(">> Beginning CRC for: " + data + " using " + key + " as the generator key")
 
-    data = padZeros(data,key)
-    print(data)
+    poly_degree = calculateDegree(key)
+    shift_register = [0] * poly_degree
+    working_data = padZeros(data,key)
+
+    print(">> Degree of generator key polynomial is: " + str(poly_degree))
+    print(">> Initializing shift_register: " + str(shift_register))
+    print(">> Preparing working_data: " + str(working_data))
+
+    working_data = list(working_data)
+    working_data = list(map(int, working_data))
+
+    while(len(working_data) > 0):
+        if(shift_register[0] == 1):
+            print("COMPUTE CRC!!")
+
+            # Testing ############################
+            shift_register.append(working_data.pop(0))
+            shift_register.pop(0)
+            ######################################
+
+            print(shift_register)
+            print(working_data)
+
+        elif(shift_register[0] != 1):
+            shift_register.append(working_data.pop(0))
+            shift_register.pop(0)
+            print(shift_register)
+            print(working_data)
+
+        else:
+            print("SHIT JUST HIT THE FAN!!")
+
+
+def computeCRC(key,working_data):
+    return working_data
 
 def verifyCRC(key,data):
-    return True
+
+    remainder = CRC(key,data)
+
+    if remainder == 0:
+        return True
+    elif remainder != 0:
+        return False
+    else:
+        print("!! Error (verifyCRC): Function remainder resulted in: " + str(remainder))
 
 def padZeros (data,key):
     power = calculateDegree(key)
@@ -56,7 +97,8 @@ def calculateDegree(key):
         else:
             print("!! Error (calculateDegree): Unexpected Value: " + x)
 
-    print(">> Degree of generator polynomial is: " + str(keyDegree))
+    keyDegree = keyDegree - 1
+
     return keyDegree
 
 def calculatePoly(key):
@@ -89,5 +131,6 @@ def checkValue(dataInt, keyInt):
                 return 0
         else:
             print("!! Error (checkValue): Unexpected value was given (frameInt: " + dataInt + " generatorInt : " + keyInt + ")")
+
 
 main()
