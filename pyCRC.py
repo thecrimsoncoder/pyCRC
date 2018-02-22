@@ -31,23 +31,25 @@ def CRC(key,data):
 
     poly_degree = calculateDegree(key)
     shift_register = [0] * poly_degree
+
     working_data = padZeros(data,key)
+    working_data = list(working_data)
+    working_data = list(map(int, working_data))
+
 
     print(">> Degree of generator key polynomial is: " + str(poly_degree))
     print(">> Initializing shift_register: " + str(shift_register))
     print(">> Preparing working_data: " + str(working_data))
 
-    working_data = list(working_data)
-    working_data = list(map(int, working_data))
+
 
     while(len(working_data) > 0):
         if(shift_register[0] == 1):
-            print("COMPUTE CRC!!")
-
 
             # Testing ############################
             shift_register.append(working_data.pop(0))
-            computeCRC(key,shift_register)
+            print("Computing XOR on: " + str(shift_register) + " using key: " + str(key))
+            shift_register = computeCRC(key,shift_register)
             shift_register.pop(0)
             ######################################
 
@@ -57,14 +59,29 @@ def CRC(key,data):
         elif(shift_register[0] != 1):
             shift_register.append(working_data.pop(0))
             shift_register.pop(0)
+
             print(shift_register)
             print(working_data)
 
         else:
             print("!! Error (CRC): Unhandled Exception: ")
 
+    print("Remainder is: " + str(shift_register))
+
 
 def computeCRC(key,shift_register):
+    print("#################################################################")
+    for index in range(0,len(shift_register)):
+        print("Comparing key value: " + str(key[index]) + " and shift_register value: " + str(shift_register[index]))
+        if int(shift_register[index]) == int(key[index]):
+
+            shift_register[index] = 0
+        elif int(shift_register[index]) != int(key[index]):
+            shift_register[index] = 1
+        else:
+            print("!! Error (computeCRC): Unhandled Exception: ")
+    print("NEW SHIFT REGISTER: " + str(shift_register))
+    print("#################################################################")
     return shift_register
 
 def verifyCRC(key,data):
@@ -102,18 +119,5 @@ def calculateDegree(key):
     keyDegree = keyDegree - 1
 
     return keyDegree
-
-def checkValue(dataInt, keyInt):
-        if(dataInt == 0 and keyInt == 0):
-                return 0
-        elif(dataInt == 1 and keyInt == 0):
-                return 1
-        elif(dataInt == 0 and keyInt == 1):
-                return 1
-        elif(dataInt == 1 and keyInt == 1):
-                return 0
-        else:
-            print("!! Error (checkValue): Unexpected value was given (frameInt: " + dataInt + " generatorInt : " + keyInt + ")")
-
 
 main()
