@@ -101,25 +101,6 @@ def calculateDegree(key):
 
     return keyDegree
 
-def calculatePoly(key):
-
-    result = ""
-    keyDegree = len(key) - 1
-
-    for x in key:
-        print("Checking: " + x)
-        if (int(x) == 1):
-            degree = "x^" + str(keyDegree) + " + "
-            result = result + degree
-            keyDegree = keyDegree - 1
-        elif (int(x) == 0):
-            keyDegree = keyDegree - 1
-        else:
-            print("!! Error (calculatePoly): Unexpected Value: " + x)
-
-    return result
-
-
 def checkValue(dataInt, keyInt):
         if(dataInt == 0 and keyInt == 0):
                 return 0
