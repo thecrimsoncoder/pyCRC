@@ -44,8 +44,10 @@ def CRC(key,data):
         if(shift_register[0] == 1):
             print("COMPUTE CRC!!")
 
+
             # Testing ############################
             shift_register.append(working_data.pop(0))
+            computeCRC(key,shift_register)
             shift_register.pop(0)
             ######################################
 
@@ -59,11 +61,11 @@ def CRC(key,data):
             print(working_data)
 
         else:
-            print("SHIT JUST HIT THE FAN!!")
+            print("!! Error (CRC): Unhandled Exception: ")
 
 
-def computeCRC(key,working_data):
-    return working_data
+def computeCRC(key,shift_register):
+    return shift_register
 
 def verifyCRC(key,data):
 
